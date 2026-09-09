@@ -2,8 +2,9 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Video, FolderKanban, Subtitles, Sparkles, Library,
   LayoutTemplate, Mic2, Music2, FileVideo, KeyRound, Languages, ScrollText,
-  Settings as SettingsIcon, Code2, Info, Search, Bell, ChevronDown, Sun,
+  Settings as SettingsIcon, Code2, Info, Search, Bell, ChevronDown, Sun, Moon,
   Command, Wand2, LogOut, User, CreditCard, Shield, Receipt, Gauge, UserCircle,
+  CheckCircle2, AlertTriangle, Mic, FileText, Download, Filter, Check,
 } from "lucide-react";
 import { useState, useRef, useEffect, type ReactNode } from "react";
 
@@ -17,11 +18,12 @@ const navMain = [
   { icon: LayoutTemplate, label: "Templates", to: "/templates" },
   { icon: Mic2, label: "Voices", to: "/voices" },
   { icon: Music2, label: "Music", to: "/music" },
-  { icon: FileVideo, label: "Outputs", to: "/outputs" },
+  { icon: FileVideo, label: "Outputs", to: "/outputs", badge: "3" },
 ];
 
 const navGeneral = [
   { icon: KeyRound, label: "API Manager", to: "/api-manager" },
+  { icon: SettingsIcon, label: "Basic Settings", to: "/basic-settings", badge: "NEW" },
   { icon: Languages, label: "Languages", to: "/languages" },
   { icon: ScrollText, label: "Logs", to: "/logs" },
   { icon: SettingsIcon, label: "Settings", to: "/settings" },
@@ -29,13 +31,13 @@ const navGeneral = [
   { icon: Info, label: "About", to: "/about" },
 ];
 
-export function AppShell({ children, maxWidth = 1600 }: { children: ReactNode; maxWidth?: number }) {
+export function AppShell({ children, maxWidth = 1760 }: { children: ReactNode; maxWidth?: number }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex">
         <Sidebar />
         <main className="flex-1 min-w-0">
-          <TopBar />
+          <TopBar maxWidth={maxWidth} />
           <div className="px-8 pb-10 pt-2 mx-auto" style={{ maxWidth }}>
             {children}
             <Footer />
@@ -56,18 +58,18 @@ function Sidebar() {
             <Wand2 className="w-[18px] h-[18px] text-white" strokeWidth={2.5} />
           </div>
           <div>
-            <div className="font-display font-extrabold text-[15px] leading-none tracking-tight">VideoForge</div>
-            <div className="text-[10px] text-sidebar-muted font-medium mt-1 tracking-wider uppercase">by Abid Ali</div>
+            <div className="font-display font-extrabold text-[15px] leading-none tracking-tight">VideoForge AI</div>
+            <div className="text-[10px] text-sidebar-muted font-medium mt-1 tracking-wider uppercase">Pro AI Video Studio</div>
           </div>
         </div>
       </Link>
 
       <div className="flex-1 overflow-y-auto px-3 pb-4">
-        <div className="px-3 pt-2 pb-2 text-[10px] font-semibold tracking-[0.14em] text-sidebar-muted">MENU</div>
+        <div className="px-3 pt-2 pb-2 text-[10px] font-semibold tracking-[0.14em] text-sidebar-muted">STUDIO</div>
         <nav className="space-y-0.5">
           {navMain.map(i => <NavItem key={i.label} {...i} active={pathname === i.to} />)}
         </nav>
-        <div className="px-3 pt-6 pb-2 text-[10px] font-semibold tracking-[0.14em] text-sidebar-muted">GENERAL</div>
+        <div className="px-3 pt-6 pb-2 text-[10px] font-semibold tracking-[0.14em] text-sidebar-muted">SYSTEM</div>
         <nav className="space-y-0.5">
           {navGeneral.map(i => <NavItem key={i.label} {...i} active={pathname === i.to} />)}
         </nav>
@@ -101,16 +103,18 @@ function NavItem({ icon: Icon, label, to, active, badge }: any) {
       <Icon className="w-[18px] h-[18px]" strokeWidth={active ? 2.4 : 2} />
       <span className="flex-1">{label}</span>
       {badge && (
-        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${badge === "AI" ? "bg-brand-gradient text-white" : "bg-secondary text-muted-foreground"}`}>{badge}</span>
+        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${badge === "AI" ? "bg-brand-gradient text-white" : "bg-secondary text-muted-foreground group-hover:bg-card"}`}>{badge}</span>
       )}
+      {/* Tooltip on hover (hidden by default; shows when title-style hover) */}
+      <span className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-foreground text-background text-[10.5px] font-semibold opacity-0 group-hover:opacity-0 whitespace-nowrap shadow-card transition-opacity" />
     </Link>
   );
 }
 
-function TopBar() {
+function TopBar({ maxWidth }: { maxWidth: number }) {
   return (
     <div className="sticky top-0 z-30 backdrop-blur-xl bg-background/70 border-b border-border/60">
-      <div className="px-8 h-[68px] flex items-center gap-4 mx-auto" style={{ maxWidth: 1600 }}>
+      <div className="px-8 h-[68px] flex items-center gap-3 mx-auto" style={{ maxWidth }}>
         <div className="flex-1 max-w-xl relative">
           <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -122,7 +126,7 @@ function TopBar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-card border border-border">
+        <div className="hidden lg:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-card border border-border">
           <div className="relative">
             <div className="w-2 h-2 rounded-full bg-success" />
             <div className="absolute inset-0 w-2 h-2 rounded-full bg-success animate-ping opacity-60" />
@@ -135,16 +139,177 @@ function TopBar() {
           <span className="text-[12px] font-semibold text-primary">Pro Plan</span>
         </div>
 
-        <button className="w-10 h-10 rounded-xl bg-card border border-border grid place-items-center text-muted-foreground hover:text-foreground transition">
-          <Sun className="w-4 h-4" />
-        </button>
-        <button className="relative w-10 h-10 rounded-xl bg-card border border-border grid place-items-center text-muted-foreground hover:text-foreground transition">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-gradient" />
-        </button>
+        <LanguageSwitch />
+        <ThemeSwitch />
+        <NotificationBell />
 
         <UserMenu />
       </div>
+    </div>
+  );
+}
+
+function ThemeSwitch() {
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", dark);
+  }, [dark]);
+  return (
+    <button
+      onClick={() => setDark(v => !v)}
+      title={dark ? "Switch to light" : "Switch to dark"}
+      className="w-10 h-10 rounded-xl bg-card border border-border grid place-items-center text-muted-foreground hover:text-foreground transition"
+    >
+      {dark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+    </button>
+  );
+}
+
+function LanguageSwitch() {
+  const [open, setOpen] = useState(false);
+  const [lang, setLang] = useState("EN");
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const h = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+  const langs = [
+    { code: "EN", label: "English" }, { code: "ES", label: "Español" },
+    { code: "FR", label: "Français" }, { code: "DE", label: "Deutsch" },
+    { code: "ZH", label: "中文" }, { code: "JA", label: "日本語" },
+    { code: "AR", label: "العربية" }, { code: "HI", label: "हिन्दी" },
+  ];
+  return (
+    <div className="relative hidden md:block" ref={ref}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        title="Language"
+        className="h-10 px-3 rounded-xl bg-card border border-border flex items-center gap-1.5 text-[12px] font-semibold text-foreground hover:border-primary/30 transition"
+      >
+        <Languages className="w-3.5 h-3.5 text-muted-foreground" /> {lang}
+      </button>
+      {open && (
+        <div className="absolute right-0 top-[calc(100%+8px)] w-[200px] max-h-[320px] overflow-auto rounded-2xl bg-card border border-border shadow-card-lg p-1.5 z-50">
+          {langs.map(l => (
+            <button
+              key={l.code}
+              onClick={() => { setLang(l.code); setOpen(false); }}
+              className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-[13px] hover:bg-secondary transition ${lang === l.code ? "text-primary font-semibold" : ""}`}
+            >
+              <span>{l.label}</span>
+              <span className="flex items-center gap-2">
+                <span className="text-[10.5px] text-muted-foreground font-mono">{l.code}</span>
+                {lang === l.code && <Check className="w-3.5 h-3.5 text-primary" />}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const initialNotifications = [
+  { id: 1, icon: CheckCircle2, tone: "success", title: "Render completed", body: "Morning Habits of CEOs · 4K · 248 MB", time: "2m", unread: true },
+  { id: 2, icon: Mic, tone: "primary", title: "Voice generated", body: "Narrator — David v2 ready to use", time: "14m", unread: true },
+  { id: 3, icon: Subtitles, tone: "primary", title: "Subtitles ready", body: "Top 10 AI Tools · 1,248 words", time: "32m", unread: true },
+  { id: 4, icon: AlertTriangle, tone: "warning", title: "API key missing", body: "Pexels provider needs reconnection", time: "1h", unread: false },
+  { id: 5, icon: FileText, tone: "default", title: "Script drafted", body: "Productivity Hacks · 920 words", time: "3h", unread: false },
+  { id: 6, icon: Download, tone: "default", title: "Export finished", body: "Tokyo at Midnight saved to library", time: "5h", unread: false },
+];
+
+function NotificationBell() {
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState(initialNotifications);
+  const [filter, setFilter] = useState<"all" | "unread">("all");
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const h = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+  const unread = items.filter(i => i.unread).length;
+  const list = filter === "unread" ? items.filter(i => i.unread) : items;
+  const toneCls: Record<string, string> = {
+    success: "bg-success/10 text-success",
+    primary: "bg-accent text-primary",
+    warning: "bg-warning/15 text-amber-700",
+    default: "bg-secondary text-muted-foreground",
+  };
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        title="Notifications"
+        className="relative w-10 h-10 rounded-xl bg-card border border-border grid place-items-center text-muted-foreground hover:text-foreground transition"
+      >
+        <Bell className="w-4 h-4" />
+        {unread > 0 && (
+          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-gradient text-white text-[10px] font-bold grid place-items-center shadow-brand">
+            {unread}
+          </span>
+        )}
+      </button>
+      {open && (
+        <div className="absolute right-0 top-[calc(100%+8px)] w-[380px] rounded-2xl bg-card border border-border shadow-card-lg overflow-hidden z-50">
+          <div className="px-4 py-3.5 border-b border-border flex items-center justify-between">
+            <div>
+              <div className="font-display font-bold text-[14px]">Notifications</div>
+              <div className="text-[10.5px] text-muted-foreground mt-0.5">{unread} unread · {items.length} total</div>
+            </div>
+            <button
+              onClick={() => setItems(items.map(i => ({ ...i, unread: false })))}
+              className="text-[11px] font-semibold text-primary hover:underline"
+            >
+              Mark all read
+            </button>
+          </div>
+          <div className="px-3 py-2 flex items-center gap-1.5 border-b border-border/60 bg-secondary/30">
+            <button
+              onClick={() => setFilter("all")}
+              className={`text-[11px] font-semibold px-2.5 py-1 rounded-md transition ${filter === "all" ? "bg-card border border-border text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"}`}
+            >All</button>
+            <button
+              onClick={() => setFilter("unread")}
+              className={`text-[11px] font-semibold px-2.5 py-1 rounded-md transition ${filter === "unread" ? "bg-card border border-border text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"}`}
+            >Unread</button>
+            <div className="flex-1" />
+            <button className="text-[11px] font-semibold text-muted-foreground hover:text-foreground flex items-center gap-1">
+              <Filter className="w-3 h-3" /> Filter
+            </button>
+          </div>
+          <div className="max-h-[420px] overflow-y-auto">
+            {list.length === 0 ? (
+              <div className="p-10 text-center">
+                <div className="w-12 h-12 mx-auto rounded-2xl bg-secondary grid place-items-center mb-3">
+                  <Bell className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div className="text-[13px] font-semibold">All caught up</div>
+                <div className="text-[11.5px] text-muted-foreground mt-1">No unread notifications.</div>
+              </div>
+            ) : list.map(n => (
+              <div key={n.id} className={`relative px-4 py-3 flex items-start gap-3 border-b border-border/40 last:border-0 hover:bg-secondary/30 transition ${n.unread ? "" : "opacity-70"}`}>
+                {n.unread && <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-brand-gradient" />}
+                <div className={`w-8 h-8 rounded-lg grid place-items-center shrink-0 ${toneCls[n.tone]}`}>
+                  <n.icon className="w-3.5 h-3.5" strokeWidth={2.4} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="text-[12.5px] font-semibold leading-tight">{n.title}</div>
+                    <div className="text-[10.5px] text-muted-foreground shrink-0">{n.time}</div>
+                  </div>
+                  <div className="text-[11.5px] text-muted-foreground mt-0.5 truncate">{n.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="px-4 py-3 border-t border-border bg-secondary/20 flex items-center justify-between">
+            <Link to="/logs" onClick={() => setOpen(false)} className="text-[11.5px] font-semibold text-primary hover:underline">Open activity log</Link>
+            <Link to="/settings" onClick={() => setOpen(false)} className="text-[11.5px] font-medium text-muted-foreground hover:text-foreground">Settings</Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -158,12 +323,13 @@ function UserMenu() {
     return () => document.removeEventListener("mousedown", h);
   }, []);
   const items = [
-    { icon: User, label: "Profile", to: "/account?tab=profile" },
-    { icon: UserCircle, label: "Account", to: "/account?tab=account" },
-    { icon: Sparkles, label: "Subscription", to: "/account?tab=subscription" },
-    { icon: Receipt, label: "Billing", to: "/account?tab=billing" },
-    { icon: Gauge, label: "API Usage", to: "/account?tab=api-usage" },
-    { icon: Shield, label: "Security", to: "/account?tab=security" },
+    { icon: User, label: "Profile" },
+    { icon: UserCircle, label: "Account" },
+    { icon: CreditCard, label: "Billing" },
+    { icon: Gauge, label: "Usage" },
+    { icon: Receipt, label: "Subscription" },
+    { icon: Shield, label: "Security" },
+    { icon: SettingsIcon, label: "Settings" },
   ];
   return (
     <div className="relative" ref={ref}>
@@ -171,9 +337,12 @@ function UserMenu() {
         onClick={() => setOpen(v => !v)}
         className="flex items-center gap-3 pl-3 pr-1.5 py-1.5 rounded-xl bg-card border border-border cursor-pointer hover:border-primary/20 transition"
       >
-        <div className="text-right leading-tight">
-          <div className="text-[12.5px] font-semibold">Abid Ali</div>
-          <div className="text-[10.5px] text-muted-foreground">Creator · Pro</div>
+        <div className="text-right leading-tight hidden sm:block">
+          <div className="text-[12.5px] font-semibold flex items-center justify-end gap-1.5">
+            Abid Ali
+            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-brand-gradient text-white">PRO</span>
+          </div>
+          <div className="text-[10.5px] text-muted-foreground">abid@abidalidev.com</div>
         </div>
         <div className="w-8 h-8 rounded-lg bg-brand-gradient grid place-items-center text-white font-semibold text-[12px]">AA</div>
         <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition ${open ? "rotate-180" : ""}`} />
@@ -183,7 +352,10 @@ function UserMenu() {
           <div className="p-3 flex items-center gap-3 border-b border-border mb-2">
             <div className="w-11 h-11 rounded-xl bg-brand-gradient grid place-items-center text-white font-bold text-[14px]">AA</div>
             <div className="min-w-0">
-              <div className="text-[13px] font-bold truncate">Abid Ali</div>
+              <div className="text-[13px] font-bold truncate flex items-center gap-1.5">
+                Abid Ali
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-accent text-primary">PRO</span>
+              </div>
               <div className="text-[11px] text-muted-foreground truncate">abid@abidalidev.com</div>
             </div>
           </div>
@@ -211,8 +383,8 @@ function Footer() {
         <div className="w-5 h-5 rounded-md bg-brand-gradient grid place-items-center">
           <Wand2 className="w-2.5 h-2.5 text-white" strokeWidth={2.5} />
         </div>
-        <span className="font-medium">Abid VideoForge AI</span>
-        <span>· v1.0.0</span>
+        <span className="font-medium">VideoForge AI</span>
+        <span>· v1.0.0 · Professional AI Video Studio</span>
       </div>
       <div className="flex items-center gap-5">
         <a href="https://abidalidev.com" target="_blank" rel="noreferrer" className="hover:text-foreground transition">abidalidev.com</a>

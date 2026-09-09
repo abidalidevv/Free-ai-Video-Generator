@@ -25,6 +25,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as EffectsRouteImport } from './routes/effects'
 import { Route as DeveloperRouteImport } from './routes/developer'
 import { Route as CreateRouteImport } from './routes/create'
+import { Route as BasicSettingsRouteImport } from './routes/basic-settings'
 import { Route as AssetsRouteImport } from './routes/assets'
 import { Route as ApiManagerRouteImport } from './routes/api-manager'
 import { Route as AccountRouteImport } from './routes/account'
@@ -111,6 +112,11 @@ const CreateRoute = CreateRouteImport.update({
   path: '/create',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BasicSettingsRoute = BasicSettingsRouteImport.update({
+  id: '/basic-settings',
+  path: '/basic-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssetsRoute = AssetsRouteImport.update({
   id: '/assets',
   path: '/assets',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/api-manager': typeof ApiManagerRoute
   '/assets': typeof AssetsRoute
+  '/basic-settings': typeof BasicSettingsRoute
   '/create': typeof CreateRoute
   '/developer': typeof DeveloperRoute
   '/effects': typeof EffectsRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/api-manager': typeof ApiManagerRoute
   '/assets': typeof AssetsRoute
+  '/basic-settings': typeof BasicSettingsRoute
   '/create': typeof CreateRoute
   '/developer': typeof DeveloperRoute
   '/effects': typeof EffectsRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/api-manager': typeof ApiManagerRoute
   '/assets': typeof AssetsRoute
+  '/basic-settings': typeof BasicSettingsRoute
   '/create': typeof CreateRoute
   '/developer': typeof DeveloperRoute
   '/effects': typeof EffectsRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/api-manager'
     | '/assets'
+    | '/basic-settings'
     | '/create'
     | '/developer'
     | '/effects'
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/api-manager'
     | '/assets'
+    | '/basic-settings'
     | '/create'
     | '/developer'
     | '/effects'
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/api-manager'
     | '/assets'
+    | '/basic-settings'
     | '/create'
     | '/developer'
     | '/effects'
@@ -285,6 +297,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   ApiManagerRoute: typeof ApiManagerRoute
   AssetsRoute: typeof AssetsRoute
+  BasicSettingsRoute: typeof BasicSettingsRoute
   CreateRoute: typeof CreateRoute
   DeveloperRoute: typeof DeveloperRoute
   EffectsRoute: typeof EffectsRoute
@@ -417,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/basic-settings': {
+      id: '/basic-settings'
+      path: '/basic-settings'
+      fullPath: '/basic-settings'
+      preLoaderRoute: typeof BasicSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assets': {
       id: '/assets'
       path: '/assets'
@@ -461,6 +481,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   ApiManagerRoute: ApiManagerRoute,
   AssetsRoute: AssetsRoute,
+  BasicSettingsRoute: BasicSettingsRoute,
   CreateRoute: CreateRoute,
   DeveloperRoute: DeveloperRoute,
   EffectsRoute: EffectsRoute,
@@ -481,3 +502,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
