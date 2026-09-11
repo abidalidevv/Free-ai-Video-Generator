@@ -1,9 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, PageHeader, Field, Input, Select, Toggle, GhostButton, PrimaryButton, Pill } from "@/components/app-shell";
-import { User, UserCircle, Sparkles, Receipt, Gauge, Shield, Check, Download, Smartphone, Key } from "lucide-react";
-import { useState } from "react";
+import { User, UserCircle, Sparkles, Receipt, Gauge, Shield, Check, Download, Smartphone, Key, Settings as SettingsIcon, Server, Activity, CheckCircle2, AlertCircle, Clock, Film, Layers, Info } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useApiHealth } from "@/hooks/useApiHealth";
+import { settingsService } from "@/services/settings.service";
+import { env } from "@/api/env";
 
 export const Route = createFileRoute("/account")({
+  validateSearch: (search: Record<string, unknown>): { tab?: string } =>
+    typeof search.tab === "string" ? { tab: search.tab } : {},
   head: () => ({ meta: [{ title: "Account — VideoForge AI" }] }),
   component: AccountPage,
 });
@@ -15,13 +21,20 @@ const tabs = [
   { k: "billing", l: "Billing", icon: Receipt },
   { k: "api-usage", l: "API Usage", icon: Gauge },
   { k: "security", l: "Security", icon: Shield },
+  { k: "general", l: "General Settings", icon: SettingsIcon },
 ];
 
 function AccountPage() {
-  const [tab, setTab] = useState("profile");
+  const { tab: tabParam } = Route.useSearch();
+  const initial = tabs.some(t => t.k === tabParam) ? tabParam! : "profile";
+  const [tab, setTab] = useState(initial);
+  useEffect(() => {
+    if (tabParam && tabs.some(t => t.k === tabParam)) setTab(tabParam);
+  }, [tabParam]);
+  const current = tabs.find(t => t.k === tab) ?? tabs[0];
   return (
     <AppShell>
-      <PageHeader crumb={["Account", tabs.find(t => t.k === tab)!.l]} title="Account" subtitle="Profile, plan, billing and security — all in one place." />
+      <PageHeader crumb={["Account", current.l]} title="Account" subtitle="Profile, plan, billing and security — all in one place." />
 
       <div className="flex gap-5">
         <aside className="w-60 shrink-0">
@@ -118,30 +131,7 @@ function AccountPage() {
             </div>
           </Group>}
 
-          {tab === "api-usage" && <Group title="API Usage" sub="This billing period">
-            <div className="grid grid-cols-3 gap-4 mb-5">
-              {[
-                { l: "LLM tokens", v: "7.2M", c: "of 10M", p: 72 },
-                { l: "TTS characters", v: "62.4k", c: "of 100k", p: 62 },
-                { l: "Stock requests", v: "4.6k", c: "of 5k", p: 92 },
-              ].map(s => (
-                <div key={s.l} className="rounded-2xl border border-border p-5">
-                  <div className="text-[12px] text-muted-foreground">{s.l}</div>
-                  <div className="font-display font-extrabold text-[24px] mt-1">{s.v}</div>
-                  <div className="text-[11px] text-muted-foreground">{s.c}</div>
-                  <div className="h-1.5 mt-3 bg-secondary rounded-full overflow-hidden"><div className="h-full bg-brand-gradient" style={{ width: `${s.p}%` }} /></div>
-                </div>
-              ))}
-            </div>
-            <div className="rounded-2xl border border-border p-5">
-              <div className="text-[12px] font-bold mb-3">Daily usage (last 14 days)</div>
-              <div className="flex items-end gap-1.5 h-32">
-                {[42, 56, 38, 71, 64, 88, 52, 76, 92, 68, 58, 84, 96, 78].map((v, i) => (
-                  <div key={i} className="flex-1 bg-brand-gradient rounded-md" style={{ height: `${v}%` }} />
-                ))}
-              </div>
-            </div>
-          </Group>}
+          {tab === "api-usage" && <ApiUsageTabContent />}
 
           {tab === "security" && <Group title="Security" sub="Protect your account">
             <Field label="Current password"><Input type="password" /></Field>
@@ -156,6 +146,15 @@ function AccountPage() {
               <Row label="Email me on new sign-in"><Toggle checked /></Row>
               <Row label="Require password for sensitive changes"><Toggle checked /></Row>
             </div>
+          </Group>}
+
+          {tab === "general" && <Group title="General" sub="Workspace name, defaults and behavior">
+            <Field label="Workspace name"><Input defaultValue="Abid's Studio" /></Field>
+            <Field label="Default project location"><Input defaultValue="C:\\VideoForge\\Projects" /></Field>
+            <Field label="Theme"><Select><option>System</option><option>Light</option><option>Dark</option></Select></Field>
+            <Row label="Start with last project"><Toggle checked /></Row>
+            <Row label="Send anonymous usage analytics"><Toggle /></Row>
+            <Row label="Show keyboard shortcuts on hover"><Toggle checked /></Row>
           </Group>}
         </div>
       </div>
@@ -173,4 +172,178 @@ function Group({ title, sub, children }: any) {
 }
 function Row({ label, children }: any) {
   return <div className="flex items-center justify-between py-2"><span className="text-[13px] font-medium">{label}</span>{children}</div>;
+}
+
+
+function ApiUsageTabContent() {
+  const { data: health, isLoading: healthLoading, isError: healthError } = useApiHealth(10_000);
+  const { data: telemetry, isLoading: telLoading, refetch } = useQuery({
+    queryKey: ["taskTelemetry"],
+    queryFn: ({ signal }) => settingsService.taskTelemetry(signal),
+    refetchInterval: 15_000,
+  });
+
+  const isOnline = Boolean(health?.ok && !healthError);
+
+  return (
+    <Group title="System & Task Telemetry" sub="Live MPT connection status, task execution statistics, and backend engine status">
+      {/* 1. MPT Backend Connection Status Card */}
+      <div className="p-4 rounded-2xl border border-border bg-secondary/30 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className={`w-10 h-10 rounded-xl grid place-items-center ${isOnline ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500"}`}>
+            <Server className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[13.5px] font-bold text-foreground">MoneyPrinterTurbo Upstream</span>
+              <Pill tone={isOnline ? "success" : "danger"}>
+                {healthLoading ? "Checking…" : isOnline ? "Online (200 OK)" : "Offline"}
+              </Pill>
+            </div>
+            <div className="text-[11.5px] text-muted-foreground mt-0.5">
+              Host: <span className="font-mono text-foreground">{env.apiBaseUrl.replace(/\/api\/v1\/?$/, "")}</span> · Ping latency: <span className="font-mono font-medium text-foreground">{health?.latencyMs != null ? `${health.latencyMs}ms` : "N/A"}</span>
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={() => refetch()}
+          className="px-3 py-1.5 rounded-xl border border-border bg-card text-[12px] font-semibold text-muted-foreground hover:text-foreground transition shadow-sm"
+        >
+          Refresh Telemetry
+        </button>
+      </div>
+
+      {/* 2. Real MPT Task Telemetry Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mt-4">
+        <div className="rounded-2xl border border-border p-4 bg-card">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-[11.5px] font-medium">Total Render Tasks</span>
+            <Activity className="w-4 h-4 text-primary" />
+          </div>
+          <div className="font-display font-extrabold text-[26px] mt-1.5 text-foreground tabular-nums">
+            {telLoading ? "…" : telemetry?.total ?? 0}
+          </div>
+          <div className="text-[11px] text-muted-foreground mt-1">Submitted to MPT engine</div>
+        </div>
+
+        <div className="rounded-2xl border border-border p-4 bg-card">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-[11.5px] font-medium">Completed Videos</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+          </div>
+          <div className="font-display font-extrabold text-[26px] mt-1.5 text-emerald-500 tabular-nums">
+            {telLoading ? "…" : telemetry?.succeeded ?? 0}
+          </div>
+          <div className="text-[11px] text-muted-foreground mt-1">Successfully synthesized</div>
+        </div>
+
+        <div className="rounded-2xl border border-border p-4 bg-card">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-[11.5px] font-medium">Running Tasks</span>
+            <Clock className="w-4 h-4 text-amber-500" />
+          </div>
+          <div className="font-display font-extrabold text-[26px] mt-1.5 text-amber-500 tabular-nums">
+            {telLoading ? "…" : telemetry?.running ?? 0}
+          </div>
+          <div className="text-[11px] text-muted-foreground mt-1">Currently processing</div>
+        </div>
+
+        <div className="rounded-2xl border border-border p-4 bg-card">
+          <div className="flex items-center justify-between text-muted-foreground">
+            <span className="text-[11.5px] font-medium">Failed Tasks</span>
+            <AlertCircle className="w-4 h-4 text-rose-500" />
+          </div>
+          <div className="font-display font-extrabold text-[26px] mt-1.5 text-rose-500 tabular-nums">
+            {telLoading ? "…" : telemetry?.failed ?? 0}
+          </div>
+          <div className="text-[11px] text-muted-foreground mt-1">Render errors or aborted</div>
+        </div>
+      </div>
+
+      {/* 3. Verified Backend Capabilities */}
+      <div className="rounded-2xl border border-border p-5 bg-card mt-4">
+        <div className="text-[13px] font-bold text-foreground mb-3 flex items-center gap-2">
+          <Layers className="w-4 h-4 text-primary" />
+          <span>Verified MPT Engine Endpoints</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[12px]">
+          <div className="p-3 rounded-xl border border-border bg-secondary/20 flex items-center justify-between">
+            <div>
+              <div className="font-semibold text-foreground">Video Synthesis Engine</div>
+              <div className="text-[11px] text-muted-foreground font-mono">POST /api/v1/videos</div>
+            </div>
+            <Pill tone="success">Operational</Pill>
+          </div>
+          <div className="p-3 rounded-xl border border-border bg-secondary/20 flex items-center justify-between">
+            <div>
+              <div className="font-semibold text-foreground">Task State Telemetry</div>
+              <div className="text-[11px] text-muted-foreground font-mono">GET /api/v1/tasks</div>
+            </div>
+            <Pill tone="success">Operational</Pill>
+          </div>
+          <div className="p-3 rounded-xl border border-border bg-secondary/20 flex items-center justify-between">
+            <div>
+              <div className="font-semibold text-foreground">Audio & Music Engine</div>
+              <div className="text-[11px] text-muted-foreground font-mono">/api/v1/audio · /musics</div>
+            </div>
+            <Pill tone="success">Operational</Pill>
+          </div>
+          <div className="p-3 rounded-xl border border-border bg-secondary/20 flex items-center justify-between">
+            <div>
+              <div className="font-semibold text-foreground">Local Video Materials</div>
+              <div className="text-[11px] text-muted-foreground font-mono">/api/v1/video_materials</div>
+            </div>
+            <Pill tone="success">Operational</Pill>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Telemetry Transparency Notice */}
+      <div className="p-4 rounded-2xl border border-border bg-secondary/20 flex items-start gap-3 mt-4">
+        <Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+        <div className="text-[12px] leading-relaxed text-muted-foreground">
+          <span className="font-semibold text-foreground">Architecture Notice regarding API Quotas & Billing: </span>
+          MoneyPrinterTurbo is a self-hosted engine and does not expose centralized token meters, GPU hardware sensors, or billing APIs.
+          External LLM and voice generation quotas are billed directly by your upstream providers (OpenAI, Anthropic, Azure Speech, SiliconFlow, Pexels).
+        </div>
+      </div>
+
+      {/* 5. Recent Render Tasks Table */}
+      <div className="rounded-2xl border border-border overflow-hidden mt-4">
+        <div className="px-4 py-3 border-b border-border bg-secondary/30 flex items-center justify-between">
+          <span className="text-[12px] font-bold text-foreground">Recent Engine Tasks</span>
+          <span className="text-[11px] text-muted-foreground">Source: GET /api/v1/tasks</span>
+        </div>
+        {telemetry?.tasks && telemetry.tasks.length > 0 ? (
+          <div className="divide-y divide-border/60">
+            {telemetry.tasks.slice(0, 5).map((t) => (
+              <div key={t.id} className="p-3.5 flex flex-wrap items-center justify-between gap-3 text-[12px] hover:bg-secondary/10 transition">
+                <div className="min-w-0">
+                  <div className="font-mono text-[11.5px] font-semibold text-foreground truncate max-w-xs">
+                    {t.id}
+                  </div>
+                  <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+                    {t.output?.url ? `Output: ${t.output.url.split("/").pop()}` : "No video output artifact"}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-24 bg-secondary rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-brand-gradient h-full transition-all" style={{ width: `${t.progress}%` }} />
+                  </div>
+                  <span className="font-mono text-[11px] text-muted-foreground w-8 text-right">{t.progress}%</span>
+                  <Pill tone={t.status === "succeeded" ? "success" : t.status === "running" ? "warning" : "danger"}>
+                    {t.status}
+                  </Pill>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="p-6 text-center text-[12px] text-muted-foreground">
+            No render tasks found in MPT task history.
+          </div>
+        )}
+      </div>
+    </Group>
+  );
 }

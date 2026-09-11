@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AuthShell } from "@/components/auth-shell";
 import { Field, Input, PrimaryButton } from "@/components/app-shell";
-import { Mail, Lock, Github, Chrome } from "lucide-react";
+import { Mail, Lock, Github, Chrome, MonitorSmartphone } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — VideoForge AI" }] }),
@@ -34,6 +34,13 @@ export const Route = createFileRoute("/login")({
         <button className="h-11 rounded-xl border border-border text-[13px] font-semibold flex items-center justify-center gap-2 hover:bg-secondary"><Chrome className="w-4 h-4" /> Google</button>
         <button className="h-11 rounded-xl border border-border text-[13px] font-semibold flex items-center justify-center gap-2 hover:bg-secondary"><Github className="w-4 h-4" /> GitHub</button>
       </div>
+
+      <Link
+        to="/"
+        className="mt-3 h-11 w-full rounded-xl border border-border text-[13px] font-semibold flex items-center justify-center gap-2 hover:bg-secondary"
+      >
+        <MonitorSmartphone className="w-4 h-4" /> Continue as Local Studio
+      </Link>
 
       <div className="text-center text-[12.5px] text-muted-foreground mt-6">
         Don't have an account? <Link to="/signup" className="text-primary font-semibold hover:underline">Create one</Link>

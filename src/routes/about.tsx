@@ -74,7 +74,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
             <Code2 className="w-6 h-6 text-primary mb-3" />
             <h3 className="font-display font-bold text-[15px]">System Information</h3>
             <div className="mt-3 space-y-1.5 text-[12px]">
-              {[["App version", "1.0.0"], ["Backend", "MoneyPrinterTurbo 1.4"], ["Platform", "Windows 11 Pro"], ["GPU", "NVIDIA RTX 4090"], ["Python", "3.11.7"], ["Node", "20.11.1"]].map(([k, v]) => (
+              {[["App version", "1.0.0"], ["Backend", "MoneyPrinterTurbo 1.4"], ["Platform", "Windows 11 Pro"], ["FFmpeg / Encoder", "Auto (Host Default)"], ["Python", "3.11.7"], ["Node", "20.11.1"]].map(([k, v]) => (
                 <div key={k} className="flex justify-between border-b border-border/50 pb-1.5"><span className="text-muted-foreground">{k}</span><span className="font-semibold">{v}</span></div>
               ))}
             </div>

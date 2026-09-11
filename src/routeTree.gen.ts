@@ -10,24 +10,34 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VoicesRouteImport } from './routes/voices'
+import { Route as VideoSettingsRouteImport } from './routes/video-settings'
+import { Route as UsageRouteImport } from './routes/usage'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as SubtitleStudioRouteImport } from './routes/subtitle-studio'
+import { Route as SubscriptionRouteImport } from './routes/subscription'
 import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SecurityRouteImport } from './routes/security'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RenderSettingsRouteImport } from './routes/render-settings'
+import { Route as RenderRouteImport } from './routes/render'
+import { Route as QueueRouteImport } from './routes/queue'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OutputsRouteImport } from './routes/outputs'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as LogsRouteImport } from './routes/logs'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LanguagesRouteImport } from './routes/languages'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as EffectsRouteImport } from './routes/effects'
 import { Route as DeveloperRouteImport } from './routes/developer'
 import { Route as CreateRouteImport } from './routes/create'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as BasicSettingsRouteImport } from './routes/basic-settings'
+import { Route as AudioStudioRouteImport } from './routes/audio-studio'
 import { Route as AssetsRouteImport } from './routes/assets'
-import { Route as ApiManagerRouteImport } from './routes/api-manager'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -35,6 +45,16 @@ import { Route as IndexRouteImport } from './routes/index'
 const VoicesRoute = VoicesRouteImport.update({
   id: '/voices',
   path: '/voices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideoSettingsRoute = VideoSettingsRouteImport.update({
+  id: '/video-settings',
+  path: '/video-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsageRoute = UsageRouteImport.update({
+  id: '/usage',
+  path: '/usage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TemplatesRoute = TemplatesRouteImport.update({
@@ -47,14 +67,19 @@ const SubtitleStudioRoute = SubtitleStudioRouteImport.update({
   path: '/subtitle-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubscriptionRoute = SubscriptionRouteImport.update({
+  id: '/subscription',
+  path: '/subscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const SecurityRoute = SecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -62,14 +87,39 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RenderSettingsRoute = RenderSettingsRouteImport.update({
+  id: '/render-settings',
+  path: '/render-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RenderRoute = RenderRouteImport.update({
+  id: '/render',
+  path: '/render',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QueueRoute = QueueRouteImport.update({
+  id: '/queue',
+  path: '/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OutputsRoute = OutputsRouteImport.update({
   id: '/outputs',
   path: '/outputs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MusicRoute = MusicRouteImport.update({
@@ -92,6 +142,11 @@ const LanguagesRoute = LanguagesRouteImport.update({
   path: '/languages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
@@ -112,19 +167,24 @@ const CreateRoute = CreateRouteImport.update({
   path: '/create',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BasicSettingsRoute = BasicSettingsRouteImport.update({
   id: '/basic-settings',
   path: '/basic-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AudioStudioRoute = AudioStudioRouteImport.update({
+  id: '/audio-studio',
+  path: '/audio-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssetsRoute = AssetsRouteImport.update({
   id: '/assets',
   path: '/assets',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiManagerRoute = ApiManagerRouteImport.update({
-  id: '/api-manager',
-  path: '/api-manager',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -147,48 +207,68 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/api-manager': typeof ApiManagerRoute
   '/assets': typeof AssetsRoute
+  '/audio-studio': typeof AudioStudioRoute
   '/basic-settings': typeof BasicSettingsRoute
+  '/billing': typeof BillingRoute
   '/create': typeof CreateRoute
   '/developer': typeof DeveloperRoute
   '/effects': typeof EffectsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/languages': typeof LanguagesRoute
   '/login': typeof LoginRoute
   '/logs': typeof LogsRoute
   '/music': typeof MusicRoute
+  '/notifications': typeof NotificationsRoute
   '/outputs': typeof OutputsRoute
+  '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRoute
+  '/queue': typeof QueueRoute
+  '/render': typeof RenderRoute
+  '/render-settings': typeof RenderSettingsRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/settings': typeof SettingsRoute
+  '/security': typeof SecurityRoute
   '/signup': typeof SignupRoute
+  '/subscription': typeof SubscriptionRoute
   '/subtitle-studio': typeof SubtitleStudioRoute
   '/templates': typeof TemplatesRoute
+  '/usage': typeof UsageRoute
+  '/video-settings': typeof VideoSettingsRoute
   '/voices': typeof VoicesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/api-manager': typeof ApiManagerRoute
   '/assets': typeof AssetsRoute
+  '/audio-studio': typeof AudioStudioRoute
   '/basic-settings': typeof BasicSettingsRoute
+  '/billing': typeof BillingRoute
   '/create': typeof CreateRoute
   '/developer': typeof DeveloperRoute
   '/effects': typeof EffectsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/languages': typeof LanguagesRoute
   '/login': typeof LoginRoute
   '/logs': typeof LogsRoute
   '/music': typeof MusicRoute
+  '/notifications': typeof NotificationsRoute
   '/outputs': typeof OutputsRoute
+  '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRoute
+  '/queue': typeof QueueRoute
+  '/render': typeof RenderRoute
+  '/render-settings': typeof RenderSettingsRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/settings': typeof SettingsRoute
+  '/security': typeof SecurityRoute
   '/signup': typeof SignupRoute
+  '/subscription': typeof SubscriptionRoute
   '/subtitle-studio': typeof SubtitleStudioRoute
   '/templates': typeof TemplatesRoute
+  '/usage': typeof UsageRoute
+  '/video-settings': typeof VideoSettingsRoute
   '/voices': typeof VoicesRoute
 }
 export interface FileRoutesById {
@@ -196,24 +276,34 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/api-manager': typeof ApiManagerRoute
   '/assets': typeof AssetsRoute
+  '/audio-studio': typeof AudioStudioRoute
   '/basic-settings': typeof BasicSettingsRoute
+  '/billing': typeof BillingRoute
   '/create': typeof CreateRoute
   '/developer': typeof DeveloperRoute
   '/effects': typeof EffectsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/help': typeof HelpRoute
   '/languages': typeof LanguagesRoute
   '/login': typeof LoginRoute
   '/logs': typeof LogsRoute
   '/music': typeof MusicRoute
+  '/notifications': typeof NotificationsRoute
   '/outputs': typeof OutputsRoute
+  '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRoute
+  '/queue': typeof QueueRoute
+  '/render': typeof RenderRoute
+  '/render-settings': typeof RenderSettingsRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/settings': typeof SettingsRoute
+  '/security': typeof SecurityRoute
   '/signup': typeof SignupRoute
+  '/subscription': typeof SubscriptionRoute
   '/subtitle-studio': typeof SubtitleStudioRoute
   '/templates': typeof TemplatesRoute
+  '/usage': typeof UsageRoute
+  '/video-settings': typeof VideoSettingsRoute
   '/voices': typeof VoicesRoute
 }
 export interface FileRouteTypes {
@@ -222,72 +312,102 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
-    | '/api-manager'
     | '/assets'
+    | '/audio-studio'
     | '/basic-settings'
+    | '/billing'
     | '/create'
     | '/developer'
     | '/effects'
     | '/forgot-password'
+    | '/help'
     | '/languages'
     | '/login'
     | '/logs'
     | '/music'
+    | '/notifications'
     | '/outputs'
+    | '/profile'
     | '/projects'
+    | '/queue'
+    | '/render'
+    | '/render-settings'
     | '/reset-password'
-    | '/settings'
+    | '/security'
     | '/signup'
+    | '/subscription'
     | '/subtitle-studio'
     | '/templates'
+    | '/usage'
+    | '/video-settings'
     | '/voices'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/account'
-    | '/api-manager'
     | '/assets'
+    | '/audio-studio'
     | '/basic-settings'
+    | '/billing'
     | '/create'
     | '/developer'
     | '/effects'
     | '/forgot-password'
+    | '/help'
     | '/languages'
     | '/login'
     | '/logs'
     | '/music'
+    | '/notifications'
     | '/outputs'
+    | '/profile'
     | '/projects'
+    | '/queue'
+    | '/render'
+    | '/render-settings'
     | '/reset-password'
-    | '/settings'
+    | '/security'
     | '/signup'
+    | '/subscription'
     | '/subtitle-studio'
     | '/templates'
+    | '/usage'
+    | '/video-settings'
     | '/voices'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/account'
-    | '/api-manager'
     | '/assets'
+    | '/audio-studio'
     | '/basic-settings'
+    | '/billing'
     | '/create'
     | '/developer'
     | '/effects'
     | '/forgot-password'
+    | '/help'
     | '/languages'
     | '/login'
     | '/logs'
     | '/music'
+    | '/notifications'
     | '/outputs'
+    | '/profile'
     | '/projects'
+    | '/queue'
+    | '/render'
+    | '/render-settings'
     | '/reset-password'
-    | '/settings'
+    | '/security'
     | '/signup'
+    | '/subscription'
     | '/subtitle-studio'
     | '/templates'
+    | '/usage'
+    | '/video-settings'
     | '/voices'
   fileRoutesById: FileRoutesById
 }
@@ -295,24 +415,34 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
-  ApiManagerRoute: typeof ApiManagerRoute
   AssetsRoute: typeof AssetsRoute
+  AudioStudioRoute: typeof AudioStudioRoute
   BasicSettingsRoute: typeof BasicSettingsRoute
+  BillingRoute: typeof BillingRoute
   CreateRoute: typeof CreateRoute
   DeveloperRoute: typeof DeveloperRoute
   EffectsRoute: typeof EffectsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  HelpRoute: typeof HelpRoute
   LanguagesRoute: typeof LanguagesRoute
   LoginRoute: typeof LoginRoute
   LogsRoute: typeof LogsRoute
   MusicRoute: typeof MusicRoute
+  NotificationsRoute: typeof NotificationsRoute
   OutputsRoute: typeof OutputsRoute
+  ProfileRoute: typeof ProfileRoute
   ProjectsRoute: typeof ProjectsRoute
+  QueueRoute: typeof QueueRoute
+  RenderRoute: typeof RenderRoute
+  RenderSettingsRoute: typeof RenderSettingsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  SettingsRoute: typeof SettingsRoute
+  SecurityRoute: typeof SecurityRoute
   SignupRoute: typeof SignupRoute
+  SubscriptionRoute: typeof SubscriptionRoute
   SubtitleStudioRoute: typeof SubtitleStudioRoute
   TemplatesRoute: typeof TemplatesRoute
+  UsageRoute: typeof UsageRoute
+  VideoSettingsRoute: typeof VideoSettingsRoute
   VoicesRoute: typeof VoicesRoute
 }
 
@@ -323,6 +453,20 @@ declare module '@tanstack/react-router' {
       path: '/voices'
       fullPath: '/voices'
       preLoaderRoute: typeof VoicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/video-settings': {
+      id: '/video-settings'
+      path: '/video-settings'
+      fullPath: '/video-settings'
+      preLoaderRoute: typeof VideoSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/usage': {
+      id: '/usage'
+      path: '/usage'
+      fullPath: '/usage'
+      preLoaderRoute: typeof UsageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/templates': {
@@ -339,6 +483,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubtitleStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subscription': {
+      id: '/subscription'
+      path: '/subscription'
+      fullPath: '/subscription'
+      preLoaderRoute: typeof SubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -346,11 +497,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
+    '/security': {
+      id: '/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof SecurityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -360,6 +511,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/render-settings': {
+      id: '/render-settings'
+      path: '/render-settings'
+      fullPath: '/render-settings'
+      preLoaderRoute: typeof RenderSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/render': {
+      id: '/render'
+      path: '/render'
+      fullPath: '/render'
+      preLoaderRoute: typeof RenderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/queue': {
+      id: '/queue'
+      path: '/queue'
+      fullPath: '/queue'
+      preLoaderRoute: typeof QueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects': {
       id: '/projects'
       path: '/projects'
@@ -367,11 +539,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/outputs': {
       id: '/outputs'
       path: '/outputs'
       fullPath: '/outputs'
       preLoaderRoute: typeof OutputsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/music': {
@@ -402,6 +588,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forgot-password': {
       id: '/forgot-password'
       path: '/forgot-password'
@@ -430,6 +623,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/basic-settings': {
       id: '/basic-settings'
       path: '/basic-settings'
@@ -437,18 +637,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BasicSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/audio-studio': {
+      id: '/audio-studio'
+      path: '/audio-studio'
+      fullPath: '/audio-studio'
+      preLoaderRoute: typeof AudioStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assets': {
       id: '/assets'
       path: '/assets'
       fullPath: '/assets'
       preLoaderRoute: typeof AssetsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api-manager': {
-      id: '/api-manager'
-      path: '/api-manager'
-      fullPath: '/api-manager'
-      preLoaderRoute: typeof ApiManagerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -479,24 +679,34 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
-  ApiManagerRoute: ApiManagerRoute,
   AssetsRoute: AssetsRoute,
+  AudioStudioRoute: AudioStudioRoute,
   BasicSettingsRoute: BasicSettingsRoute,
+  BillingRoute: BillingRoute,
   CreateRoute: CreateRoute,
   DeveloperRoute: DeveloperRoute,
   EffectsRoute: EffectsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  HelpRoute: HelpRoute,
   LanguagesRoute: LanguagesRoute,
   LoginRoute: LoginRoute,
   LogsRoute: LogsRoute,
   MusicRoute: MusicRoute,
+  NotificationsRoute: NotificationsRoute,
   OutputsRoute: OutputsRoute,
+  ProfileRoute: ProfileRoute,
   ProjectsRoute: ProjectsRoute,
+  QueueRoute: QueueRoute,
+  RenderRoute: RenderRoute,
+  RenderSettingsRoute: RenderSettingsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
-  SettingsRoute: SettingsRoute,
+  SecurityRoute: SecurityRoute,
   SignupRoute: SignupRoute,
+  SubscriptionRoute: SubscriptionRoute,
   SubtitleStudioRoute: SubtitleStudioRoute,
   TemplatesRoute: TemplatesRoute,
+  UsageRoute: UsageRoute,
+  VideoSettingsRoute: VideoSettingsRoute,
   VoicesRoute: VoicesRoute,
 }
 export const routeTree = rootRouteImport

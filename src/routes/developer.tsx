@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, PageHeader, GhostButton, Pill } from "@/components/app-shell";
-import { Code2, Terminal, FileJson, Layers, AlertTriangle, Eye, EyeOff, Copy } from "lucide-react";
+import { Code2, Terminal, FileJson, Layers, AlertTriangle, Eye, EyeOff, Copy, Shield, ShieldAlert, Lock, Server } from "lucide-react";
+import { env, featureFlags } from "@/api/env";
 import { useState } from "react";
 
 export const Route = createFileRoute("/developer")({
@@ -63,25 +64,82 @@ function DevPage() {
         </CodeBlock>
       )}
       {tab === "json" && <CodeBlock title="project.json">{JSON_PAYLOAD}</CodeBlock>}
-      {tab === "config" && <CodeBlock title="config.toml">{`[backend]\nurl = "http://127.0.0.1:8501"\ntimeout_seconds = 120\n\n[paths]\nffmpeg = "/usr/local/bin/ffmpeg"\nwhisper_models = "./models/whisper"\n\n[rendering]\nencoder = "h264_nvenc"\nbitrate_mbps = 12`}</CodeBlock>}
+      {tab === "config" && (
+        <div className="rounded-3xl bg-card border border-border p-6 shadow-card space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 grid place-items-center text-primary">
+              <Code2 className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-[16px]">Server Configuration</h3>
+              <p className="text-[12px] text-muted-foreground">MoneyPrinterTurbo backend configuration state</p>
+            </div>
+          </div>
+          <div className="p-4 rounded-2xl bg-secondary/30 border border-border text-[12.5px] space-y-2">
+            <div className="flex items-center gap-2 text-foreground font-semibold">
+              <Pill tone="default">Security Protected</Pill>
+              <span>Server config.toml is private</span>
+            </div>
+            <p className="text-muted-foreground leading-relaxed">
+              In compliance with architectural security standards, MoneyPrinterTurbo upstream does not expose a public REST configuration endpoint (<code className="font-mono text-[11px] bg-secondary px-1.5 py-0.5 rounded">GET /api/v1/config</code> does not exist).
+              Backend credentials, LLM keys, and TTS provider tokens remain strictly isolated on the host server's local <code className="font-mono text-[11px] bg-secondary px-1.5 py-0.5 rounded">config.toml</code> file and are never sent over HTTP to the client browser.
+            </p>
+          </div>
+          <div className="space-y-2 pt-2">
+            <div className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">Active Client Configuration</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-[12px]">
+              <div className="p-3 rounded-xl border border-border bg-card">
+                <span className="text-muted-foreground block text-[11px] uppercase font-sans font-bold">API Base URL</span>
+                <span className="text-primary font-semibold truncate block mt-0.5">{env.apiBaseUrl}</span>
+              </div>
+              <div className="p-3 rounded-xl border border-border bg-card">
+                <span className="text-muted-foreground block text-[11px] uppercase font-sans font-bold">Environment</span>
+                <span className="text-foreground font-semibold truncate block mt-0.5">{env.environment}</span>
+              </div>
+              <div className="p-3 rounded-xl border border-border bg-card">
+                <span className="text-muted-foreground block text-[11px] uppercase font-sans font-bold">Request Timeout</span>
+                <span className="text-foreground font-semibold truncate block mt-0.5">{env.requestTimeout} ms</span>
+              </div>
+              <div className="p-3 rounded-xl border border-border bg-card">
+                <span className="text-muted-foreground block text-[11px] uppercase font-sans font-bold">Max Retries</span>
+                <span className="text-foreground font-semibold truncate block mt-0.5">{env.maxRetries}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {tab === "env" && (
         <div className="rounded-3xl bg-card border border-border shadow-card overflow-hidden">
           <div className="flex items-center justify-between p-4 border-b border-border">
-            <div><div className="font-display font-bold text-[15px]">Environment</div><div className="text-[11.5px] text-muted-foreground">Process variables</div></div>
-            <button onClick={() => setUnmasked(v => !v)} className="text-[12px] font-semibold text-primary flex items-center gap-1.5">{unmasked ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />} {unmasked ? "Hide" : "Reveal"} secrets</button>
+            <div>
+              <div className="font-display font-bold text-[15px]">Client Environment</div>
+              <div className="text-[11.5px] text-muted-foreground">Client process variables & feature flags</div>
+            </div>
+            <button onClick={() => setUnmasked(v => !v)} className="text-[12px] font-semibold text-primary flex items-center gap-1.5">
+              {unmasked ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />} {unmasked ? "Hide" : "Reveal"} values
+            </button>
           </div>
-          <div className="p-5 font-mono text-[12px] space-y-1.5">
+          <div className="p-5 font-mono text-[12px] space-y-2">
             {[
-              ["NODE_ENV", "production"],
-              ["BACKEND_URL", "http://127.0.0.1:8501"],
-              ["OPENAI_API_KEY", unmasked ? "sk-proj-aHb2k…9LfM" : "•••••••••••••"],
-              ["ELEVENLABS_API_KEY", unmasked ? "sk_8jL…aZ2p" : "•••••••••••••"],
-              ["PEXELS_API_KEY", unmasked ? "2k4pAvE…fT" : "•••••••••••"],
-              ["CUDA_VISIBLE_DEVICES", "0"],
-              ["LOG_LEVEL", "info"],
+              ["VITE_API_BASE_URL", env.apiBaseUrl],
+              ["VITE_ENVIRONMENT", env.environment],
+              ["VITE_REQUEST_TIMEOUT", `${env.requestTimeout}ms`],
+              ["VITE_UPLOAD_LIMIT", `${env.uploadLimit / (1024 * 1024)}MB`],
+              ["VITE_API_MAX_RETRIES", String(env.maxRetries)],
+              ["VITE_API_KEY", env.apiKey ? (unmasked ? env.apiKey : "•••••••••••••") : "(Not required / empty)"],
+              ["FEATURE: render", featureFlags.render ? "enabled" : "disabled"],
+              ["FEATURE: captions", featureFlags.captions ? "enabled" : "disabled"],
+              ["FEATURE: templates", featureFlags.templates ? "enabled" : "disabled"],
             ].map(([k, v]) => (
-              <div key={k} className="flex gap-4"><span className="text-primary font-semibold w-56 shrink-0">{k}</span><span className="text-muted-foreground">{v}</span></div>
+              <div key={k} className="flex flex-wrap gap-4 items-center">
+                <span className="text-primary font-semibold w-56 shrink-0">{k}</span>
+                <span className="text-muted-foreground">{v}</span>
+              </div>
             ))}
+          </div>
+          <div className="p-4 border-t border-border bg-secondary/20 text-[12px] text-muted-foreground flex items-center gap-2">
+            <Lock className="w-4 h-4 text-emerald-500 shrink-0" />
+            <span>Server backend secrets and LLM keys are held exclusively in server-side config.toml and never exposed to the client.</span>
           </div>
         </div>
       )}
